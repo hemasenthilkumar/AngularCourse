@@ -14,6 +14,7 @@ import { MenuComponent } from './menu/menu.component';
 import { DishdetailComponent } from './dishdetail/dishdetail.component';
 import {DishService} from './service/dish.service';
 import {PromotionService} from './service/promotion.service';
+import {LeaderService} from './service/leader.service';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { HomeComponent } from './home/home.component';
@@ -42,7 +43,7 @@ import { ContactComponent } from './contact/contact.component';
     MatCardModule,
     MatButtonModule
   ],
-  providers: [DishService,PromotionService],
+  providers: [DishService,PromotionService,LeaderService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
