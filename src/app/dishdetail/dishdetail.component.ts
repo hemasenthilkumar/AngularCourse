@@ -1,10 +1,12 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit ,ViewChild} from '@angular/core';
 import {Dish} from '../shared/dish';
+import {Comment} from '../shared/comment';
 import {Params} from '@angular/router';
 import{Location} from '@angular/common';
 import {DishService} from '../service/dish.service';
 import { ActivatedRoute } from '@angular/router';
 import {switchMap} from 'rxjs/operators';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 @Component({
   selector: 'app-dishdetail',
   templateUrl: './dishdetail.component.html',
@@ -12,12 +14,91 @@ import {switchMap} from 'rxjs/operators';
 })
 export class DishdetailComponent implements OnInit {
  
+  
+  commentForm: FormGroup;
+  comment: Comment;
+  date:any;
     dish :Dish;
     dishIds:string[];
+    flag:boolean;
     prev:string;
     next:string;
-  constructor(private dishService:DishService, private route:ActivatedRoute,private location: Location) { }
+    @ViewChild('cform') commentFormDirective;
+    formErrors={
+      'author':'',
+      'comment':'',
+    };
 
+    validationMessages = {
+      'author': {
+        'required':      'Name is required.',
+        'minlength':     'Name must be at least 2 characters long.',
+        'maxlength':     'Name cannot be more than 25 characters long.'
+      },
+      'comment': {
+        'required':      'Comment is required.',
+        'minlength':     'Comment must be at least 2 characters long.',
+        'maxlength':     'Comment cannot be more than 25 characters long.'
+      }
+    };
+  
+  constructor(private fb:FormBuilder, private dishService:DishService, private route:ActivatedRoute,private location: Location) { this.createForm(); }
+  createForm()
+  {
+      this.commentForm=this.fb.group(
+        {
+          author:['',[Validators.required, Validators.minLength(2),Validators.maxLength(25)]],
+          rating:5,
+          comment:['',[Validators.required, Validators.minLength(2),Validators.maxLength(25)]]
+        }
+      );
+
+      this.commentForm.valueChanges
+    .subscribe(data=>this.onValueChanged(data));
+
+    this.onValueChanged();
+  
+  }
+
+  onValueChanged(data?:any)
+  {
+    if (!this.commentForm) { return; }
+    const form = this.commentForm;
+    for (const field in this.formErrors) {
+      if (this.formErrors.hasOwnProperty(field)) {
+        // clear previous error message (if any)
+        this.formErrors[field] = '';
+        const control = form.get(field);
+        if (control && control.dirty && !control.valid) {
+          const messages = this.validationMessages[field];
+          for (const key in control.errors) {
+            if (control.errors.hasOwnProperty(key)) {
+              this.formErrors[field] += messages[key] + ' ';
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+
+  onSubmit()
+  {
+    this.comment=new Comment();
+    this.date=Date.now();
+    this.flag=true;
+    this.comment.author=this.commentForm.get("author").value;
+    this.comment.rating=this.commentForm.get("rating").value;
+    this.comment.comment=this.commentForm.get("comment").value;
+    this.comment.date=this.date;
+    console.log(this.comment);
+    this.commentForm.reset({
+      author:'',
+      rating:5,
+      comment:'',
+    });
+  }
   ngOnInit() {
     this.dishService.getDishIds().subscribe((dishIds)=>this.dishIds=dishIds);
     this.route.params.pipe(switchMap(
