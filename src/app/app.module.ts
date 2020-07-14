@@ -14,6 +14,7 @@ import 'hammerjs';
 import { MenuComponent } from './menu/menu.component';
 import { DishdetailComponent } from './dishdetail/dishdetail.component';
 import {DishService} from './service/dish.service';
+import {ProcessHTTPMsgService} from './service/process-httpmsg.service';
 import {PromotionService} from './service/promotion.service';
 import {LeaderService} from './service/leader.service';
 import { HeaderComponent } from './header/header.component';
@@ -75,7 +76,8 @@ import {baseURL} from './shared/baseurl';
   entryComponents: [
     LoginComponent
 ],
-  providers: [DishService,PromotionService,LeaderService,{provide:'BaseURL',useValue: baseURL}],
+  providers: [DishService,ProcessHTTPMsgService,
+    PromotionService,LeaderService,{provide:'BaseURL',useValue: baseURL}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

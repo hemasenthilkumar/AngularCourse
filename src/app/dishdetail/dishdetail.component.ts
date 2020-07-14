@@ -17,6 +17,7 @@ export class DishdetailComponent implements OnInit {
   
   commentForm: FormGroup;
   comment: Comment;
+  errMsg:string;
   date:any;
     dish :Dish;
     dishIds:string[];
@@ -100,14 +101,14 @@ export class DishdetailComponent implements OnInit {
     });
   }
   ngOnInit() {
-    this.dishService.getDishIds().subscribe((dishIds)=>this.dishIds=dishIds);
+    this.dishService.getDishIds().subscribe((dishIds)=>this.dishIds=dishIds,errmsg=>this.errMsg=<any>errmsg);
     this.route.params.pipe(switchMap(
       (params:Params)=>this.dishService.getDish(params['id'])
       ))
     .subscribe(dish=>{
       this.dish=dish;
       this.setPrevNext(dish.id);
-    });
+    },error=>this.errMsg=<any>error);
   }
 
   setPrevNext(dishId:string)
