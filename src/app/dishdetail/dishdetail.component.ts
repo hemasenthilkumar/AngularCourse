@@ -24,6 +24,7 @@ export class DishdetailComponent implements OnInit {
     flag:boolean;
     prev:string;
     next:string;
+    dishCopy:Dish;
     @ViewChild('cform') commentFormDirective;
     formErrors={
       'author':'',
@@ -93,6 +94,17 @@ export class DishdetailComponent implements OnInit {
     this.comment.rating=this.commentForm.get("rating").value;
     this.comment.comment=this.commentForm.get("comment").value;
     this.comment.date=this.date;
+    this.dishCopy.comments.push(this.comment);
+    this.dishService.putDish(this.dishCopy)
+    .subscribe(dish=>{
+      this.dish=dish;
+      this.dishCopy=dish;
+    },errmsg=>
+    {
+      this.dish=null;
+      this.dishCopy=null;
+      this.errMsg=<any>errmsg;
+    });
     console.log(this.comment);
     this.commentForm.reset({
       author:'',
@@ -107,6 +119,7 @@ export class DishdetailComponent implements OnInit {
       ))
     .subscribe(dish=>{
       this.dish=dish;
+      this.dishCopy=dish;
       this.setPrevNext(dish.id);
     },error=>this.errMsg=<any>error);
   }

@@ -53,13 +53,13 @@
 </mat-list-item>
 </div>
 
-<div *ngIf="comment">
+<!-- <div *ngIf="comment">
   <mat-list-item>
   <h3 matLine>{{comment.comment}}</h3>
   <h4 matLine>{{comment.rating}} Stars</h4>
   <h5 matLine> -- {{comment.author}} {{comment.date |date :'mediumDate'}}</h5>
   </mat-list-item>
-</div>
+</div> -->
 
       <form novalidate [formGroup]="commentForm" #cform="ngForm" (ngSubmit)="onSubmit()">
         <p>
