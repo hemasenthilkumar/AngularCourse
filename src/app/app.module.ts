@@ -36,6 +36,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import {MatSliderModule} from '@angular/material/slider';
 
 import {baseURL} from './shared/baseurl';
+import { HighlightDirective } from './directives/highlight.directive';
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,6 +48,7 @@ import {baseURL} from './shared/baseurl';
     AboutComponent,
     ContactComponent,
     LoginComponent,
+    HighlightDirective,
 
   ],
   imports: [
